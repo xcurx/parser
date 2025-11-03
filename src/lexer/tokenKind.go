@@ -179,3 +179,21 @@ func TokenKindString(kind TokenKind) string {
 		return fmt.Sprintf("unknown(%d)", kind)
 	}
 }
+
+var reserved_lookup = map[string]TokenKind{
+	"let":		LET,
+	"const":	CONST,
+	"class":	CLASS,
+	"new":		NEW,
+	"import":	IMPORT,
+	"export":	EXPORT,
+	"from":		FROM,
+	"fn":		FN,
+	"if":		IF,
+	"else":		ELSE,
+	"for":		FOR,
+	"while":	WHILE,
+	"foreach":	FOREACH,
+	"typeof":	TYPEOF,
+	"in":		IN,
+}

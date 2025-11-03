@@ -79,6 +79,7 @@ func createLexer(source string) *lexer {
 		Tokens: make([]Token, 0),
 		patterns: []regexPattern{
 			//define all patterns here
+			{regexp.MustCompile(`[a-zA-Z_][a-zA-Z0-9_]*`), symbolHandler},
 			{regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},
 			{regexp.MustCompile(`"[^"]*"`), stringHandler},
 			{regexp.MustCompile(`\/\/.*`), skipHandler},
@@ -118,6 +119,18 @@ func createLexer(source string) *lexer {
 	}
 }
 
+func symbolHandler(lex *lexer, regex *regexp.Regexp) {
+	match := regex.FindString(lex.remainder())
+
+    if kind, exists := reserved_lookup[match]; exists {
+		lex.push(NewToken(kind, match))
+	} else {
+		lex.push(NewToken(IDENTIFIER, match))
+	}
+
+	lex.advanceN(len(match))
+}
+
 func numberHandler(lex *lexer, regex *regexp.Regexp) {
 	match := regex.FindString(lex.remainder())
 	lex.push(NewToken(NUMBER, match))
@@ -126,9 +139,9 @@ func numberHandler(lex *lexer, regex *regexp.Regexp) {
 
 func stringHandler(lex *lexer, regex *regexp.Regexp) {
 	match := regex.FindStringIndex(lex.remainder())
-	stringLitral := lex.remainder()[match[0]:match[1]]
+	stringLitral := lex.remainder()[match[0] + 1:match[1] - 1]
 	lex.push(NewToken(STRING, stringLitral))
-	lex.advanceN(len(stringLitral))
+	lex.advanceN(len(stringLitral) + 2)
 }
 
 func skipHandler(lex *lexer, regex *regexp.Regexp) {
