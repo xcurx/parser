@@ -3,7 +3,10 @@ package main
 import (
 	// "fmt"
 	"os"
+
+	"github.com/sanity-io/litter"
 	"github.com/xcurx/parser/src/lexer"
+	"github.com/xcurx/parser/src/parser"
 )
 
 func main() {
@@ -12,7 +15,6 @@ func main() {
 	
 	tokens := lexer.Tokenize(source)
 
-	for _, token := range tokens {
-		token.Debug()
-	}
+	ast := parser.Parse(tokens)
+	litter.Dump(ast)
 }

@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/xcurx/parser/src/ast"
 	"github.com/xcurx/parser/src/lexer"
 )
@@ -11,6 +13,8 @@ type parser struct {
 }
 
 func createParser(tokens []lexer.Token) *parser {
+    createTokenLookups()
+
 	return &parser{
 		tokens: tokens,
 	}
@@ -46,4 +50,22 @@ func (p *parser) advance() lexer.Token {
 
 func (p *parser) hasTokens() bool {
 	return p.pos < len(p.tokens) && p.currentTokenKind() != lexer.EOF
+}
+
+func (p *parser) expectError(expectedKind lexer.TokenKind, err any) lexer.Token {
+	token := p.currentToken()
+	kind := token.Kind
+
+	if kind != expectedKind {
+		if err == nil {
+			err = fmt.Sprintf("Expected %s but recieved %s instead.\n", lexer.TokenKindString(expectedKind), lexer.TokenKindString(kind))
+		}
+		panic(err)
+	}
+
+	return p.advance()
+}
+
+func (p *parser) expect(expectedKind lexer.TokenKind) lexer.Token {
+	return p.expectError(expectedKind, nil)
 }

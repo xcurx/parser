@@ -16,7 +16,7 @@ type StringExpr struct {
 func (n StringExpr) expr() {}
 
 type SymbolExpr struct {
-	Value float64
+	Value string
 }
 
 func (n SymbolExpr) expr() {}
