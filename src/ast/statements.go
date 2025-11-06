@@ -11,3 +11,11 @@ type ExprStmt struct {
 }
 
 func (n ExprStmt) stmt() {}
+
+type VarDeclStmt struct {
+	VariableName  string
+	IsConst       bool
+	AssignedValue Expr
+}
+
+func (n VarDeclStmt) stmt() {}
