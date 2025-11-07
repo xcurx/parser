@@ -51,3 +51,41 @@ func parse_var_decl_stmt(p *parser) ast.Stmt {
 		ExplicitType:  explicitType,
 	}
 }
+
+func parse_block_stmt(p *parser) ast.Stmt {
+    p.expect(lexer.OPEN_CURLY)
+	body := make([]ast.Stmt, 0)
+
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
+		body = append(body, parse_stmt(p))
+	}
+
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.BlockStmt{
+		Body: body,
+	}
+}
+
+func parse_if_stmt(p *parser) ast.Stmt {
+	p.advance()
+	condition := parse_expr(p, default_bp)
+	consequent := parse_block_stmt(p)
+
+	var alternate ast.Stmt
+	if p.currentTokenKind() == lexer.ELSE {
+		p.advance()
+
+		if p.currentTokenKind() == lexer.IF {
+			alternate = parse_if_stmt(p)
+		} else {
+			alternate = parse_block_stmt(p)
+		}
+	}
+    
+	return ast.IfStmt{
+        Condition: condition,
+		Consequent: consequent,
+		Alternate: alternate,
+	}
+}

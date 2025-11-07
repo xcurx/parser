@@ -1,0 +1,11 @@
+let foo = 100;
+
+if (foo == 100) {
+    let foo = 500;
+} else if (foo >= 200) {
+    if (foo < 400) {
+        let bar = "less";
+    }
+} else {
+    let bar = "In else";
+}

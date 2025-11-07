@@ -20,3 +20,11 @@ type VarDeclStmt struct {
 }
 
 func (n VarDeclStmt) stmt() {}
+
+type IfStmt struct {
+	Condition  Expr
+	Consequent Stmt
+	Alternate  Stmt
+}
+
+func (n IfStmt) stmt() {}
