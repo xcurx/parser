@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "fmt"
 	"os"
 
 	"github.com/sanity-io/litter"
@@ -10,7 +9,7 @@ import (
 )
 
 func main() {
-	bytes, _ := os.ReadFile("./examples/02.lang")
+	bytes, _ := os.ReadFile("./examples/04.lang")
 	source := string(bytes)
 	
 	tokens := lexer.Tokenize(source)
