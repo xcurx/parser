@@ -30,6 +30,7 @@ func type_led(kind lexer.TokenKind, bp binding_power, type_led_fn type_led_handl
 func createTokenTypeLookups() {
     type_nud(lexer.IDENTIFIER, parse_symbol_type)
 	type_nud(lexer.OPEN_BRACKET, parse_array_type)
+	type_nud(lexer.FN, parse_fn_type)
 }
 
 func parse_type(p *parser, bp binding_power) ast.Type {
@@ -71,3 +72,28 @@ func parse_array_type(p *parser) ast.Type {
 		Underlying: underlyingType,
 	}
 }
+
+func parse_fn_type(p *parser) ast.Type {
+	p.advance()
+	p.expect(lexer.OPEN_PAREN)
+    args := make([]ast.Type, 0);
+
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_PAREN {
+        if p.currentTokenKind() == lexer.COMMA {
+			p.advance()
+		}
+
+		args = append(args, parse_type(p, default_bp))
+	}
+
+	p.expect(lexer.CLOSE_PAREN)
+
+	returnType := parse_type(p, default_bp)
+
+	parse_block_stmt(p)
+
+    return ast.FuncType{
+		Args: args,
+		ReturnType: returnType,
+	}
+} 
