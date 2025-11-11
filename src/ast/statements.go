@@ -30,7 +30,7 @@ type IfStmt struct {
 func (n IfStmt) stmt() {}
 
 type ReturnStmt struct {
-	ExprStmt Expr
+	Stmt Stmt
 }
 
 func (n ReturnStmt) stmt() {}
@@ -42,8 +42,16 @@ type Parameter struct {
 type FuncDeclStmt struct {
 	Name      string
 	Parameter []Parameter
-	Body      Stmt
+	Body      []Stmt
 	Return    Type
 }
 
 func (n FuncDeclStmt) stmt() {}
+
+type FuncLiteral struct {
+	Parameter []Parameter
+	Body      []Stmt
+	Return    Type
+}
+
+func (n FuncLiteral) stmt() {}

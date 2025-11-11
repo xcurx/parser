@@ -97,3 +97,9 @@ func parse_fn_type(p *parser) ast.Type {
 		ReturnType: returnType,
 	}
 }
+
+// func ass() func() string {
+// 	return func() string {
+// 		return ""
+// 	}
+// } 

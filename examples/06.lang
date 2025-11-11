@@ -8,5 +8,11 @@ fn myFunc(foo: number, bar: string) []string {
 }
 
 fn returnTheFunc() fn(number, string) []float {} {
-    return 0.655;
+    if (foo == 0) {
+        return 5+5;
+    }
+
+    return fn(n: number, s: string) []string {
+        return 077;
+    }
 }

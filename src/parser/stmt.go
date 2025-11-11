@@ -92,17 +92,26 @@ func parse_if_stmt(p *parser) ast.Stmt {
 
 func parse_return_stmt(p *parser) ast.Stmt {
 	p.advance()
-    expr := parse_expr(p, default_bp)
-	p.expect(lexer.SEMI_COLON)
+    stmt := parse_stmt(p)
+	// p.expect(lexer.SEMI_COLON)
+    _, isExpr := stmt.(ast.ExprStmt)
+	_, isFuncLiteral := stmt.(ast.FuncLiteral)
+	
+	if !isExpr && !isFuncLiteral {
+		panic("Invalid expr")
+	}
 
     return ast.ReturnStmt{
-		ExprStmt: expr,
+		Stmt: stmt,
 	}
 }
 
 func parse_fn_stmt(p* parser) ast.Stmt {
     p.advance()
-	name := p.expect(lexer.IDENTIFIER)
+	var name string
+	if p.currentTokenKind() == lexer.IDENTIFIER {
+        name = p.advance().Value
+	}
 	p.expect(lexer.OPEN_PAREN)
 	parameters := make([]ast.Parameter, 0)  
 
@@ -123,10 +132,18 @@ func parse_fn_stmt(p* parser) ast.Stmt {
 
 	body := parse_block_stmt(p)
 
+	if (name == "") {
+		return ast.FuncLiteral{
+            Parameter: parameters,
+			Return: return_type,
+        	Body: body.(ast.BlockStmt).Body,
+		}
+	}
+
 	return ast.FuncDeclStmt{
-        Name: name.Value,
+        Name: name,
 		Parameter: parameters,
 		Return: return_type,
-        Body: body,
+        Body: body.(ast.BlockStmt).Body,
 	}
 }
