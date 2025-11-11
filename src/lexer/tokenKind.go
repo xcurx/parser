@@ -60,6 +60,7 @@ const (
 	EXPORT
 	FROM
 	FN
+	RETURN
 	IF
 	ELSE
 	FOR
@@ -161,6 +162,8 @@ func TokenKindString(kind TokenKind) string {
 		return "from"
 	case FN:
 		return "fn"
+	case RETURN:
+		return "return"
 	case IF:
 		return "if"
 	case ELSE:
@@ -189,6 +192,7 @@ var reserved_lookup = map[string]TokenKind{
 	"export":	EXPORT,
 	"from":		FROM,
 	"fn":		FN,
+	"return":   RETURN,
 	"if":		IF,
 	"else":		ELSE,
 	"for":		FOR,

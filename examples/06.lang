@@ -1,1 +1,12 @@
 let myFun: fn(int, string, []number) [][]string {};
+
+fn myFunc(foo: number, bar: string) []string {
+    foo += 10;
+    bar = "in a function";
+
+    return bar + foo;
+}
+
+fn returnTheFunc() fn(number, string) []float {} {
+    return 0.655;
+}

@@ -96,4 +96,4 @@ func parse_fn_type(p *parser) ast.Type {
 		Args: args,
 		ReturnType: returnType,
 	}
-} 
+}

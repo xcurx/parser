@@ -89,3 +89,44 @@ func parse_if_stmt(p *parser) ast.Stmt {
 		Alternate: alternate,
 	}
 }
+
+func parse_return_stmt(p *parser) ast.Stmt {
+	p.advance()
+    expr := parse_expr(p, default_bp)
+	p.expect(lexer.SEMI_COLON)
+
+    return ast.ReturnStmt{
+		ExprStmt: expr,
+	}
+}
+
+func parse_fn_stmt(p* parser) ast.Stmt {
+    p.advance()
+	name := p.expect(lexer.IDENTIFIER)
+	p.expect(lexer.OPEN_PAREN)
+	parameters := make([]ast.Parameter, 0)  
+
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_PAREN {
+        if (len(parameters) != 0) {
+			p.expect(lexer.COMMA)
+		}
+
+        param_name := p.expect(lexer.IDENTIFIER)
+		p.expect(lexer.COLON)
+		param_type := parse_type(p, default_bp)
+		parameters = append(parameters, ast.Parameter{Name: param_name.Value, Type: param_type})
+	}
+
+	p.expect(lexer.CLOSE_PAREN)
+
+	return_type := parse_type(p, default_bp)
+
+	body := parse_block_stmt(p)
+
+	return ast.FuncDeclStmt{
+        Name: name.Value,
+		Parameter: parameters,
+		Return: return_type,
+        Body: body,
+	}
+}

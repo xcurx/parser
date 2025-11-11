@@ -28,3 +28,22 @@ type IfStmt struct {
 }
 
 func (n IfStmt) stmt() {}
+
+type ReturnStmt struct {
+	ExprStmt Expr
+}
+
+func (n ReturnStmt) stmt() {}
+type Parameter struct {
+	Name string
+	Type Type
+}
+
+type FuncDeclStmt struct {
+	Name      string
+	Parameter []Parameter
+	Body      Stmt
+	Return    Type
+}
+
+func (n FuncDeclStmt) stmt() {}
